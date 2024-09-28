@@ -45,7 +45,7 @@ setenv bootcmd run dhcp_bootcmd
 env save
 ```
 
-If run execute the `reset` command, the CM will reboot itself, and then immediately fail because the DHCP server hasn't been configured properly. It won't by default retry.
+If you execute the `reset` command, the CM will reboot itself, and then immediately fail because the DHCP server hasn't been configured properly. It won't by default retry.
 
 U-Boot uses the DHCP `next-server` address as the TFTP server, accomplished via the following for ISC DHCP server:—
 
@@ -66,7 +66,7 @@ setenv bootscript ABC123/bootscript.uimg
 env save
 ```
 
-Either the boot script or the kernel must be available. The bootscript must be prepared using the `mkimage` utility (included in the `uboot-tools` Debian package):
+Either the boot script or the kernel must be available. The bootscript must be prepared using the `mkimage` utility (included in the `u-boot-tools` Debian package):
 
 ```
 mkimage -c none -A riscv -T script -d input.script bootscript.uimg
