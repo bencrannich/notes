@@ -20,6 +20,14 @@ root=/dev/nfs nfsroot=192.168.150.1:/srv/nfs/mars,nfsvers=3 rw ip=dhcp rootwait
 /srv/nfs/mars      192.168.150.0/255.255.255.0(rw,sync,insecure,no_subtree_check,no_root_squash)
 ```
 
+Once `/etc/exports` has been modified (or `/etc/exports/*.exports`), use `exportfs` to enact the changes:
+
+```
+exportfs -a
+```
+
+Unless an error occurs, this won't produce any output. Run `exportfs` without options to see the list of currently NFS-exported filesystems.
+
 ## Preparing a Debian root on the server
 
 With `mmdebstrap`, the architecture of the host doesn't need to match that of the root being built.
