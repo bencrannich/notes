@@ -18,7 +18,7 @@ Each device works broadly the same way:-
 
 Raspberry Pi devices with on-board Ethernet and Compute Modules all have NetBoot capability which they can fall back to if local boot methods (MMC, SD, NVMe, USB) fail and CM4s will behave like this by default. Newer Raspberry Pi 400 models (and potentially others) will default to a "Net Install" option rather than NetBooting, and will need to be booted into Linux and the boot order settings in the EEPROM updated using the `rpi-eeprom-config` utility [as documented on the official site](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-bootloader-configuration).
 
-To boot a Raspberry Pi, the following options are required (for ISC DHCP server):
+To boot a Raspberry Pi, the following options are required (for ISC DHCP server):—
 
 ```
   option vendor-encapsulated-options "Raspberry Pi Boot";
@@ -32,4 +32,59 @@ RPi devices will prefer to obtain files from a subdirectory on the TFTP server w
 
 The files in the TFTP server directory are identical to those normally placed on the VFAT partition of a bootable SD card for the Pi. Upstream versions can be obtained from the [Raspberry Pi firmware repository](https://github.com/raspberrypi/firmware) (**Caution**: that repository is 25GB if cloned).
 
+### Milk-V Mars CM
 
+The Milk-V Mars CM is a RISC-V 64 compute module with a form factor and basedboard connection compatible with the Raspberry Pi CM4, built around the same SoC as used in the StarFive VisionFive2, the JH7110. The Mars CM uses U-Boot and so can NetBoot, but won't by default.
+
+The easiest way to modify the boot configuration on the Mars CM is to plug it into an I/O board with GPIO pins you have a UART attached to, it speaks 115200-8-n-1 almost instantly when powered on, and has a 3-second countdown before automatic boot commences.
+
+The simplest possible way to configure a Mars CM to NetBoot by default is to interrupt automatic boot and then run:—
+
+```
+setenv bootcmd run dhcp_bootcmd
+env save
+```
+
+If run execute the `reset` command, the CM will reboot itself, and then immediately fail because the DHCP server hasn't been configured properly. It won't by default retry.
+
+U-Boot uses the DHCP `next-server` address as the TFTP server, accomplished via the following for ISC DHCP server:—
+
+```
+  next-server 192.168.150.1;
+```
+
+Optionally, the DHCP server can provide a `filename`, which is the name of a *kernel* image which will be loaded:
+
+```
+  filename "marscm/vmlinuz-6.6.20-starfive";
+```
+
+U-Boot will attempt to load a file named `XXX bootscr.uimg XXX` from the root of the TFTP server. This can be changed, for example to mimic the Raspberry Pi approach, via the following bootloader commands:-
+
+```
+setenv bootscript ABC123/bootscript.uimg
+env save
+```
+
+Either the boot script or the kernel must be available. The bootscript must be prepared using the `mkimage` utility (included in the `uboot-tools` Debian package):
+
+```
+mkimage -c none -A riscv -T script -d input.script bootscript.uimg
+```
+
+U-Boot is an extremely flexible and powerful bootloader and so the bootscript could do a great deal in principle (this needs to be balanced against maintainability).
+
+A simple bootscript for the Mars CM would be:
+
+```
+tftpboot $kernel_addr_r /starfive/vmlinuz-6.6.20-starfive
+tftpboot $fdt_addr_r /starfive/dtbs/6.6.20/starfive/jh7110-starfive-visionfive-2-v1.3b.dtb
+tftpboot $ramdisk_addr_r /starfive/initrd.img-6.6.20-startfive
+booti $kernel_addr_r $ramdisk_addr_r $fdt_addr_r
+```
+
+If you don't use an initrd, comment out the third `tftpboot` line and replace `$ramdisk_addr_r` with a hyphen in the `booti` line:
+
+```
+booti $kernel_addr_r - $fdt_addr_r
+```
