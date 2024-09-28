@@ -1,6 +1,6 @@
 # NFS Root Filesystem
 
-Provided a suitable kernel (many are default), Linux can use an NFS mount as a root filesystem. This is useful for:—
+Provided a suitable kernel (many are by default), Linux can use an NFS mount as a root filesystem. This is useful for:—
 
 - diskless devices
 - single-system image clusters
