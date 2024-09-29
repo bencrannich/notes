@@ -16,3 +16,5 @@ CM4 baseboard compatible:—
 * DeskPi Super6C - hosts six compute modules and optional SSDs, interconnected via an internal gigabit switch
 * OrangePi and offers its own baseboards, featuring an additional third connector which provides more interfaces to its compute modules
 * WaveShare offers several CM4-compatible baseboards
+* BigTreeTech Pad 7 - features an integrated touchscreen, designed for use primarily as a 3D printer control system, but has specific support for generic use with the CM4
+
