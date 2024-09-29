@@ -20,13 +20,13 @@ root=/dev/nfs nfsroot=192.168.150.1:/srv/nfs/mars,nfsvers=3 rw ip=dhcp rootwait
 /srv/nfs/mars      192.168.150.0/255.255.255.0(rw,sync,insecure,no_subtree_check,no_root_squash)
 ```
 
-Once `/etc/exports` has been modified (or `/etc/exports/*.exports`), use `exportfs` to enact the changes:
+Once `/etc/exports` (or `/etc/exports/*.exports`) has been modified, use `exportfs` to enact the changes:
 
 ```
-exportfs -a
+sudo exportfs -a
 ```
 
-Unless an error occurs, this won't produce any output. Run `exportfs` without options to see the list of currently NFS-exported filesystems.
+Unless an error occurs, this won't produce any output. Run `sudo exportfs` without options to see the list of currently NFS-exported filesystems.
 
 ## Preparing a Debian root on the server
 
@@ -35,12 +35,12 @@ With `mmdebstrap`, the architecture of the host doesn't need to match that of th
 Debian's `riscv64` port requires a distribution of `sid`.
 
 ```
-apt install -y mmdebstrap qemu-user-static
+sudo apt install -y mmdebstrap qemu-user-static
 bootstrap_arch=riscv64
 bootstrap_dist=sid
 bootstrap_path=/srv/nfs/mars
 bootstrap_mirror=http://ftp.uk.debian.org/debian
-mmdebstrap \
+sudo mmdebstrap \
   --architectures=$bootstrap_arch \
   --include=openssh-server,nfs-common,fake-hwclock,kmod,iproute2,ntp,pciutils,usbutils,gdisk,kpartx,apt-utils,ca-certificates,gnupg,gpgv,gnupg-utils,nano,less,htop,sudo \
   --components=main,contrib,non-free-firmware \
