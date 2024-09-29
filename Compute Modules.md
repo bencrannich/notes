@@ -4,7 +4,7 @@
 
 CM4 baseboard compatible:—
 
-* [Raspberry Pi CM4](Raspberry%20Pi#Compute%20Modules)
+* [Raspberry Pi CM4](Raspberry%20Pi#compute-modules)
 * [Milk-V Mars CM](StarFive%20JH7110)
 * OrangePi CM4, CM5
 * WaveShare Core3566
