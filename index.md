@@ -1,5 +1,3 @@
-# Notes
-
 ## Hardware
 
 * [Compute Modules](Compute%20Modules)
