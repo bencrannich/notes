@@ -4,7 +4,7 @@ The advent of low-cost small-form-factor networked single-board computers (SBCs)
 
 However, once you have more than a handful of compute nodes, flashing OS images onto them or burning SD cards can become tedious. Whilst this isn't necessarily something you need to do often in production, it can be a real burden when prototyping. Network booting (NetBooting) is the solution to that challenge: when powered on, each node contacts a server on the local network to download configuration information, a kernel image, and optional ramdisk, which it then boots as though they were on an SD card.
 
-NetBooting can be coupled with an NFS server from which the nodes can mount a root filesystem, which can then either be transferred to local storage, or used on an ongoing basis in a diskless or semi-diskless setup.
+NetBooting can be coupled with an NFS server from which the nodes can mount a root filesystem, which can then either be transferred to local storage, or used on an ongoing basis in a diskless or semi-diskless setup. Even when operated with a local root filesystem, NetBooting can be of great value because it enables centralised management of the early boot process, provided the devices in question have a guaranteed network connection to a suitable server.
 
 ## NetBoot process
 
